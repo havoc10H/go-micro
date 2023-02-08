@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package go.micro.store;
+
+service Store {
+	rpc List(ListRequest) returns (stream ListResponse) {};
+	rpc Read(ReadRequest) returns (ReadResponse) {};
+	rpc Write(WriteRequest) returns (WriteResponse) {};
+	rpc Delete(DeleteRequest) returns (DeleteResponse) {};
+}
+
+message Record {
+	// key of the record
+	string key = 1;
+	// value in the record
+	bytes value = 2;
+	// timestamp in unix seconds
+	int64 expiry = 3;
+}
+
+message ReadOptions {
+	bool prefix = 1;
+}
+
+message ReadRequest {
+	string key = 1;
+	ReadOptions options = 2;
+}
+
+message ReadResponse {
+	repeated Record records = 1;
+}
+
+message WriteRequest {
+	Record record = 1;
+}
+
+message WriteResponse {}
+
+message DeleteRequest {
+	string key = 1;
+}
+
+message DeleteResponse {}
+
+message ListRequest {}
+
+message ListResponse {
+	repeated Record records = 1;
+}
